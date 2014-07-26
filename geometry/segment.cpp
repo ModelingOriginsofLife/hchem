@@ -1,7 +1,11 @@
 #ifndef SEGMENT_CPP
 #define SEGMENT_CPP
 
+#include <iostream>
+
 #include "vector2d.cpp"
+
+using namespace std;
 
 struct segment
 {
@@ -46,5 +50,11 @@ struct segment
         this->s = (this->b - this->a) / !(this->b - this->a);
     }
 };
+
+ostream & operator << (ostream & out, segment s)
+{
+    out<<"[a = "<<s.a<<", b = "<<s.b<<"]";
+    return out;
+}
 
 #endif

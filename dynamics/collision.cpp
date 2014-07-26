@@ -1,8 +1,12 @@
 #ifndef COLLISION_CPP
 #define COLLISION_CPP
 
+#include <iostream>
+
 #include "particle.cpp"
 #include "../geometry/segment.cpp"
+
+using namespace std;
 
 struct collision
 {
@@ -13,7 +17,7 @@ struct collision
     double t;
     
     unsigned int version;
-    enum {PARTICLE, SEGMENT_A, SEGMENT_B, SEGMENT_MID, CHAIN} type;
+    enum {PARTICLE, SEGMENT_A, SEGMENT_B, SEGMENT_MID} type;
     
     // Constructors
     
@@ -163,6 +167,13 @@ struct collision
         
         if(this->t == INFINITY)
             this->t = -1;
+        else
+        {
+            this->a = &a;
+            this->s = &s;
+            
+            this->version = version;
+        }
         
     }
     
@@ -175,6 +186,70 @@ struct collision
         this->t = c.t;
         this->version = c.version;
         this->type = c.type;
+    }
+    
+    // Methods
+    
+    void compute()
+    {
+        if((*this))
+        {
+            switch(this->type)
+            {
+                case PARTICLE:
+                {
+                    this->a->s.x += this->a->p / this->a->m * (this->t - this->a->t);
+                    this->a->t = this->t;
+                    
+                    this->b->s.x += this->b->p / this->b->m * (this->t - this->b->t);
+                    this->b->t = this->t;
+                    
+                    vector2d r = (this->a->s.x - this->b->s.x) / !(this->a->s.x - this->b->s.x);
+
+                    vector2d pxa = (this->a->p * r) * r;
+                    vector2d pxb = (this->b->p * r) * r;
+                    
+                    this->a->p = this->a->p - pxa + pxb;
+                    this->b->p = this->b->p - pxb + pxa;
+                    
+                    break;
+                }
+
+                case SEGMENT_A:
+                {
+                    this->a->s.x += this->a->p / this->a->m * (this->t - this->a->t);
+                    this->a->t = this->t;
+                    
+                    vector2d r = this->a->s.x - this->s->a / !(this->a->s.x - this->s->a);
+                    this->a->p -= 2.0 * (this->a->p * r) * r;
+                    
+                    break;
+                }
+                
+                case SEGMENT_B:
+                {
+                    this->a->s.x += this->a->p / this->a->m * (this->t - this->a->t);
+                    this->a->t = this->t;
+                    
+                    vector2d r = this->a->s.x - this->s->b / !(this->a->s.x - this->s->b);
+                    this->a->p -= 2.0 * (this->a->p * r) * r;
+                    
+                    break;
+                }
+                    
+                case SEGMENT_MID:
+                {
+                    this->a->s.x += this->a->p / this->a->m * (this->t - this->a->t);
+                    this->a->t = this->t;
+                    
+                    vector2d p = this->s->a + ((this->a->s.x - this->s->a) * this->s->s) * this->s->s;
+                    vector2d r = (this->a->s.x - p) / !(this->a->s.x - p);
+                    this->a->p -= 2.0 * (this->a->p * r) * r;
+                    
+                    break;
+                }
+            }
+        }
     }
     
     // Operators
@@ -197,5 +272,36 @@ struct collision
         return (t >= 0);
     }
 };
+
+ostream & operator << (ostream & out, collision c)
+{
+    out<<"{";
+    
+    switch(c.type)
+    {
+        case collision::SEGMENT_A:
+            out<<"SEGMENT A";
+            break;
+        case collision::SEGMENT_B:
+            out<<"SEGMENT B";
+            break;
+        case collision::SEGMENT_MID:
+            out<<"SEGMENT MID";
+            break;
+        case collision::PARTICLE:
+            out<<"PARTICLE";
+            break;
+    }
+    
+    out<<": t = "<<c.t<<", a = "<<*(c.a);
+
+    if(c.type == collision::PARTICLE)
+        out<<", b = "<<*(c.b);
+    else
+        out<<", s = "<<*(c.s);
+    out<<"}";
+    
+    return out;
+}
 
 #endif

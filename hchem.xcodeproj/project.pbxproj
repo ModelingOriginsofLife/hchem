@@ -6,6 +6,10 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		F0802FB71981FDEE00C021F7 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F03458981981FBF90000024B /* main.cpp */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXCopyFilesBuildPhase section */
 		F03458811981FBD50000024B /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -19,7 +23,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		F03458831981FBD50000024B /* hchem */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; name = hchem; path = "/Users/monti/Desktop/Progetti/Modeling Origins of Life/hchem/build/Debug/hchem"; sourceTree = "<absolute>"; };
+		F01C1FAE198388B300557BFD /* hchem */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = hchem; sourceTree = BUILT_PRODUCTS_DIR; };
+		F01C1FB01983960B00557BFD /* engine.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = engine.cpp; path = engine/engine.cpp; sourceTree = SOURCE_ROOT; };
 		F03458901981FBF90000024B /* collision_heap.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = collision_heap.cpp; sourceTree = "<group>"; };
 		F03458921981FBF90000024B /* collision.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = collision.cpp; sourceTree = "<group>"; };
 		F03458931981FBF90000024B /* particle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = particle.cpp; sourceTree = "<group>"; };
@@ -51,10 +56,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F01C1FAF198395D300557BFD /* engine */ = {
+			isa = PBXGroup;
+			children = (
+				F01C1FB01983960B00557BFD /* engine.cpp */,
+			);
+			name = engine;
+			sourceTree = "<group>";
+		};
 		F034587A1981FBD50000024B = {
 			isa = PBXGroup;
 			children = (
 				F03458851981FBD50000024B /* hchem */,
+				F01C1FAE198388B300557BFD /* hchem */,
 			);
 			sourceTree = "<group>";
 		};
@@ -66,6 +80,7 @@
 				F034588F1981FBF90000024B /* data */,
 				F03458941981FBF90000024B /* geometry */,
 				F03458911981FBF90000024B /* dynamics */,
+				F01C1FAF198395D300557BFD /* engine */,
 				F03458981981FBF90000024B /* main.cpp */,
 			);
 			path = hchem;
@@ -140,7 +155,7 @@
 			);
 			name = hchem;
 			productName = hchem;
-			productReference = F03458831981FBD50000024B /* hchem */;
+			productReference = F01C1FAE198388B300557BFD /* hchem */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -174,6 +189,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F0802FB71981FDEE00C021F7 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -283,6 +299,7 @@
 				F034588E1981FBD50000024B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

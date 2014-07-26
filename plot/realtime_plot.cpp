@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "../geometry/sphere.cpp"
+#include "../geometry/segment.cpp"
 #include "../network/udp_socket.cpp"
 
 #define REALTIME_PLOT_LOCAL_PORT 1235
@@ -108,9 +109,9 @@ class realtime_plot
         this->spheres.push_back(plot_sphere(s, color, label));
     }
     
-    void line(vector2d a, vector2d b, const unsigned char color[3])
+    void line(segment s, const unsigned char color[3])
     {
-        this->lines.push_back(plot_line(a, b, color));
+        this->lines.push_back(plot_line(s.a, s.b, color));
     }
     
     void render()

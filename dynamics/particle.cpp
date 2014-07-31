@@ -19,7 +19,6 @@ struct particle
     double t;
     
     vector <unsigned int> collisions;
-    vector <bond *> bonds;
     
     // Constructors
     

@@ -8,7 +8,7 @@
 class collision_heap
 {
     collision * collisions;
-    unsigned int length;
+    unsigned int len;
     
     public:
     
@@ -17,7 +17,7 @@ class collision_heap
     collision_heap()
     {
         this->collisions = new collision[HEAP_SIZE];
-        this->length = 0;
+        this->len = 0;
     }
     
     // Destructor
@@ -27,14 +27,21 @@ class collision_heap
         delete [] this->collisions;
     }
     
+    // Getters
+    
+    unsigned int length()
+    {
+        return this->len;
+    }
+    
     // Methods
     
     void push(collision c)
     {
-        this->length++;
-        this->collisions[this->length] = c;
+        this->len++;
+        this->collisions[this->len] = c;
         
-        for(unsigned int i=this->length; i > 1 && this->collisions[i/2].t > this->collisions[i].t; i/=2)
+        for(unsigned int i=this->len; i > 1 && this->collisions[i/2].t > this->collisions[i].t; i/=2)
         {
             collision s = this->collisions[i/2];
             this->collisions[i/2] = this->collisions[i];
@@ -51,9 +58,9 @@ class collision_heap
     {
         collision c = this->collisions[1];
         
-        this->collisions[1] = this->collisions[this->length];
+        this->collisions[1] = this->collisions[this->len];
         
-        this->length--;
+        this->len--;
         
         unsigned int i = 1;
 
@@ -63,10 +70,10 @@ class collision_heap
             unsigned int right = 2 * i + 1;
             unsigned int smallest = i;
             
-            if(left <= this->length && this->collisions[smallest].t > this->collisions[left].t)
+            if(left <= this->len && this->collisions[smallest].t > this->collisions[left].t)
                 smallest = left;
             
-            if(right <= this->length && this->collisions[smallest].t > this->collisions[right].t)
+            if(right <= this->len && this->collisions[smallest].t > this->collisions[right].t)
                 smallest = right;
             
             if(smallest == i)

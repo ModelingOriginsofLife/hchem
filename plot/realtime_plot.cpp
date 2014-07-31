@@ -7,6 +7,7 @@
 #include "../geometry/sphere.cpp"
 #include "../geometry/segment.cpp"
 #include "../network/udp_socket.cpp"
+#include "../engine/engine.cpp"
 
 #define REALTIME_PLOT_LOCAL_PORT 1235
 #define REALTIME_PLOT_DEFAULT_PORT 1234
@@ -112,6 +113,17 @@ class realtime_plot
     void line(segment s, const unsigned char color[3])
     {
         this->lines.push_back(plot_line(s.a, s.b, color));
+    }
+    
+    void plot(engine & e)
+    {
+        unsigned char col[] = {255, 0, 0};
+
+        for(unsigned int i=0; i<e.segments.size(); i++)
+            this->line(e.segments[i], col);
+        
+        for(unsigned int i=0; i<e.particles.size(); i++)
+            this->sphere(e.particles[i].s, col, "A0");
     }
     
     void render()

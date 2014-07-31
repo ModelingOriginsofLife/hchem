@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include "particle.cpp"
+#include "bond.cpp"
 #include "../geometry/segment.cpp"
 
 using namespace std;
@@ -13,11 +14,12 @@ struct collision
     particle * a;
     particle * b;
     segment * s;
+    bond * n;
     
     double t;
     
-    unsigned int version;
-    enum {PARTICLE, SEGMENT_A, SEGMENT_B, SEGMENT_MID} type;
+    unsigned int id;
+    enum {PARTICLE, SEGMENT_A, SEGMENT_B, SEGMENT_MID, BOND_STRETCH, BOND_COLLISION} type;
     
     // Constructors
     
@@ -25,7 +27,7 @@ struct collision
     {
     }
     
-    collision(particle & a, particle & b, double tmax, unsigned int version)
+    collision(particle & a, particle & b, double tmax, unsigned int id)
     {
         vector2d va = a.p / a.m;
         vector2d vb = b.p / b.m;
@@ -51,7 +53,7 @@ struct collision
         
         this->t = (-B - sqrt(delta)) / (2.0 * A);
 
-        if(this->t < a.t || this->t < b.t || this->t > tmax)
+        if(this->t <= a.t || this->t <= b.t || this->t > tmax)
         {
             this->t = -1;
             return;
@@ -61,10 +63,10 @@ struct collision
         this->b = &b;
         
         this->type = PARTICLE;
-        this->version = version;
+        this->id = id;
     }
     
-    collision(particle & a, segment & s, double tmax, unsigned int version)
+    collision(particle & a, segment & s, double tmax, unsigned int id)
     {
         vector2d va = a.p / a.m;
         vector2d xa = a.s.x - va * a.t;
@@ -86,7 +88,7 @@ struct collision
         
         tA = (-BA - sqrt(deltaA)) / (2.0 * AA);
         
-        if(tA < a.t || this->t > tmax)
+        if(tA <= a.t || this->t > tmax)
             tA = -1;
         
         // Check collision with vertex B
@@ -106,7 +108,7 @@ struct collision
         
         tB = (-BB - sqrt(deltaB)) / (2.0 * AB);
         
-        if(tB < a.t || this->t > tmax)
+        if(tB <= a.t || this->t > tmax)
             tB = -1;
         
         // Check collision mid-segment
@@ -130,7 +132,7 @@ struct collision
         
         tMID = (-BMID - sqrt(deltaMID)) / (2.0 * AMID);
         
-        if(tMID < a.t || this->t > tmax)
+        if(tMID <= a.t || this->t > tmax)
             tMID = -1;
         
         
@@ -138,7 +140,7 @@ struct collision
         {
             vector2d xaf = xa + va * tMID;
             double imp = (xaf - s.a) * s.s;
-            if(imp < 0 || imp > !(s.a - s.b))
+            if(imp <= 0 || imp >= !(s.a - s.b))
                 tMID = -1;
         }
         
@@ -165,16 +167,53 @@ struct collision
             this->type = SEGMENT_MID;
         }
         
-        if(this->t == INFINITY)
+        if(this->t > tmax)
             this->t = -1;
         else
         {
             this->a = &a;
             this->s = &s;
             
-            this->version = version;
+            this->id = id;
         }
         
+    }
+    
+    collision(bond & n, double tmax, unsigned int id)
+    {
+        vector2d va = n.a->p / n.a->m;
+        vector2d vb = n.b->p / n.b->m;
+        
+        vector2d xa = n.a->s.x - va * n.a->t;
+        vector2d xb = n.b->s.x - vb * n.b->t;
+        
+        vector2d p = xa - xb;
+        vector2d q = va - vb;
+        
+        double A = ~q;
+        double B = 2.0 * p * q;
+        double C = ~p - pow(n.l, 2);
+        
+        double delta = pow(B, 2) - 4.0 * A * C;
+        
+        if(delta < 0)
+        {
+            this->t = -1;
+            return;
+        }
+        
+        this->t = (-B - sqrt(delta)) / (2.0 * A);
+        
+        if(this->t <= n.a->t || this->t <= n.b->t || this->t > tmax)
+        {
+            this->t = -1;
+            return;
+        }
+        
+        this->n = &n;
+        
+        this->type = BOND_STRETCH;
+        this->id = id;
     }
     
     collision(const collision & c)
@@ -184,7 +223,7 @@ struct collision
         this->s = c.s;
         
         this->t = c.t;
-        this->version = c.version;
+        this->id = c.id;
         this->type = c.type;
     }
     
@@ -261,7 +300,7 @@ struct collision
         this->s = c.s;
         
         this->t = c.t;
-        this->version = c.version;
+        this->id = c.id;
         this->type = c.type;
     }
     
@@ -275,7 +314,7 @@ struct collision
 
 ostream & operator << (ostream & out, collision c)
 {
-    out<<"{";
+    out<<"{id = "<<c.id<<", type = ";
     
     switch(c.type)
     {

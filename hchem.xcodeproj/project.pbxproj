@@ -23,6 +23,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		F01486C719872A140078758E /* checklist.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = checklist.h; sourceTree = "<group>"; };
+		F01486C919872A2F0078758E /* checklist.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = checklist.cpp; sourceTree = "<group>"; };
+		F01486CA198798650078758E /* bond.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = bond.cpp; sourceTree = "<group>"; };
 		F01C1FAE198388B300557BFD /* hchem */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = hchem; sourceTree = BUILT_PRODUCTS_DIR; };
 		F01C1FB01983960B00557BFD /* engine.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = engine.cpp; path = engine/engine.cpp; sourceTree = SOURCE_ROOT; };
 		F03458901981FBF90000024B /* collision_heap.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = collision_heap.cpp; sourceTree = "<group>"; };
@@ -89,6 +92,8 @@
 		F034588F1981FBF90000024B /* data */ = {
 			isa = PBXGroup;
 			children = (
+				F01486C919872A2F0078758E /* checklist.cpp */,
+				F01486C719872A140078758E /* checklist.h */,
 				F03458901981FBF90000024B /* collision_heap.cpp */,
 			);
 			path = data;
@@ -99,6 +104,7 @@
 			children = (
 				F03458921981FBF90000024B /* collision.cpp */,
 				F03458931981FBF90000024B /* particle.cpp */,
+				F01486CA198798650078758E /* bond.cpp */,
 			);
 			path = dynamics;
 			sourceTree = SOURCE_ROOT;

@@ -114,7 +114,7 @@ class realtime_plot
     {
         this->lines.push_back(plot_line(s.a, s.b, color));
     }
-        
+    
     void render()
     {
         data plot_data;

@@ -28,8 +28,8 @@
 		F01486CA198798650078758E /* bond.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = bond.cpp; sourceTree = "<group>"; };
 		F01C1FAE198388B300557BFD /* hchem */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = hchem; sourceTree = BUILT_PRODUCTS_DIR; };
 		F01C1FB01983960B00557BFD /* engine.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = engine.cpp; path = engine/engine.cpp; sourceTree = SOURCE_ROOT; };
-		F03458901981FBF90000024B /* collision_heap.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = collision_heap.cpp; sourceTree = "<group>"; };
-		F03458921981FBF90000024B /* collision.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = collision.cpp; sourceTree = "<group>"; };
+		F03458901981FBF90000024B /* event_heap.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = event_heap.cpp; sourceTree = "<group>"; };
+		F03458921981FBF90000024B /* event.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = event.cpp; sourceTree = "<group>"; };
 		F03458931981FBF90000024B /* particle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = particle.cpp; sourceTree = "<group>"; };
 		F03458951981FBF90000024B /* segment.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = segment.cpp; sourceTree = "<group>"; };
 		F03458961981FBF90000024B /* sphere.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = sphere.cpp; sourceTree = "<group>"; };
@@ -46,6 +46,7 @@
 		F03458A21981FBF90000024B /* udp_socket.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = udp_socket.cpp; sourceTree = "<group>"; };
 		F03458A31981FBF90000024B /* udp_socket.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = udp_socket.h; sourceTree = "<group>"; };
 		F03458A51981FBF90000024B /* realtime_plot.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = realtime_plot.cpp; sourceTree = "<group>"; };
+		F0C95CEB198CA8D900BFF70A /* zone.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = zone.cpp; path = engine/zone.cpp; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +64,7 @@
 			isa = PBXGroup;
 			children = (
 				F01C1FB01983960B00557BFD /* engine.cpp */,
+				F0C95CEB198CA8D900BFF70A /* zone.cpp */,
 			);
 			name = engine;
 			sourceTree = "<group>";
@@ -94,7 +96,7 @@
 			children = (
 				F01486C919872A2F0078758E /* checklist.cpp */,
 				F01486C719872A140078758E /* checklist.h */,
-				F03458901981FBF90000024B /* collision_heap.cpp */,
+				F03458901981FBF90000024B /* event_heap.cpp */,
 			);
 			path = data;
 			sourceTree = SOURCE_ROOT;
@@ -102,7 +104,7 @@
 		F03458911981FBF90000024B /* dynamics */ = {
 			isa = PBXGroup;
 			children = (
-				F03458921981FBF90000024B /* collision.cpp */,
+				F03458921981FBF90000024B /* event.cpp */,
 				F03458931981FBF90000024B /* particle.cpp */,
 				F01486CA198798650078758E /* bond.cpp */,
 			);

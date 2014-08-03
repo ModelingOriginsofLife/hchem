@@ -7,8 +7,6 @@
 #include "../geometry/vector2d.cpp"
 #include "../geometry/sphere.cpp"
 
-class bond;
-
 using namespace std;
 
 struct particle
@@ -17,8 +15,6 @@ struct particle
     double m;
     vector2d p;
     double t;
-    
-    vector <unsigned int> collisions;
     
     // Constructors
     

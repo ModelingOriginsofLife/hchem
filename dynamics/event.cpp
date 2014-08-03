@@ -1,5 +1,5 @@
-#ifndef COLLISION_CPP
-#define COLLISION_CPP
+#ifndef EVENT_CPP
+#define EVENT_CPP
 
 #include <iostream>
 
@@ -9,7 +9,7 @@
 
 using namespace std;
 
-struct collision
+struct event
 {
     particle * a;
     particle * b;
@@ -19,15 +19,15 @@ struct collision
     double t;
     
     unsigned int id;
-    enum {PARTICLE, SEGMENT_A, SEGMENT_B, SEGMENT_MID, BOND_STRETCH, BOND_COLLISION} type;
+    enum {PARTICLE, SEGMENT_A, SEGMENT_B, SEGMENT_MID, BOND_STRETCH} type;
     
     // Constructors
     
-    collision()
+    event()
     {
     }
     
-    collision(particle & a, particle & b, double tmax, unsigned int id)
+    event(particle & a, particle & b, double tmax, unsigned int id)
     {
         vector2d va = a.p / a.m;
         vector2d vb = b.p / b.m;
@@ -51,7 +51,7 @@ struct collision
             return;
         }
         
-        this->t = (-B - sqrt(delta)) / (2.0 * A);
+        this->t = (2.0 * C) / (-B + sqrt(delta));
 
         if(this->t <= a.t || this->t <= b.t || this->t > tmax)
         {
@@ -66,12 +66,12 @@ struct collision
         this->id = id;
     }
     
-    collision(particle & a, segment & s, double tmax, unsigned int id)
+    event(particle & a, segment & s, double tmax, unsigned int id)
     {
         vector2d va = a.p / a.m;
         vector2d xa = a.s.x - va * a.t;
         
-        // Check collision with vertex A
+        // Check event with vertex A
         
         vector2d dxA = xa - s.a;
 
@@ -86,12 +86,12 @@ struct collision
         if(deltaA < 0)
             tA = -1;
         
-        tA = (-BA - sqrt(deltaA)) / (2.0 * AA);
+        tA = (2.0 * CA) / (-BA + sqrt(deltaA));
         
         if(tA <= a.t || this->t > tmax)
             tA = -1;
         
-        // Check collision with vertex B
+        // Check event with vertex B
         
         vector2d dxB = xa - s.b;
         
@@ -106,12 +106,12 @@ struct collision
         if(deltaB < 0)
             tB = -1;
         
-        tB = (-BB - sqrt(deltaB)) / (2.0 * AB);
+        tB = (2.0 * CB) / (-BB + sqrt(deltaB));
         
         if(tB <= a.t || this->t > tmax)
             tB = -1;
         
-        // Check collision mid-segment
+        // Check event mid-segment
         
         vector2d projxa = ((xa - s.a) * s.s) * s.s;
         vector2d projva = (va * s.s) * s.s;
@@ -130,7 +130,7 @@ struct collision
         if(deltaMID < 0)
             tMID = -1;
         
-        tMID = (-BMID - sqrt(deltaMID)) / (2.0 * AMID);
+        tMID = (2.0 * CMID) / (-BMID + sqrt(deltaMID));
         
         if(tMID <= a.t || this->t > tmax)
             tMID = -1;
@@ -179,7 +179,7 @@ struct collision
         
     }
     
-    collision(bond & n, double tmax, unsigned int id)
+    event(bond & n, double tmax, unsigned int id)
     {
         vector2d va = n.a->p / n.a->m;
         vector2d vb = n.b->p / n.b->m;
@@ -203,7 +203,7 @@ struct collision
         }
         
         this->t = (-B - sqrt(delta)) / (2.0 * A);
-        
+
         if(this->t <= n.a->t || this->t <= n.b->t || this->t > tmax)
         {
             this->t = -1;
@@ -216,7 +216,7 @@ struct collision
         this->id = id;
     }
     
-    collision(const collision & c)
+    event(const event & c)
     {
         this->a = c.a;
         this->b = c.b;
@@ -287,13 +287,32 @@ struct collision
                     
                     break;
                 }
+                    
+                case BOND_STRETCH:
+                {
+                    this->a->s.x += this->a->p / this->a->m * (this->t - this->a->t);
+                    this->a->t = this->t;
+                    
+                    this->b->s.x += this->b->p / this->b->m * (this->t - this->b->t);
+                    this->b->t = this->t;
+                    
+                    vector2d r = (this->a->s.x - this->b->s.x) / !(this->a->s.x - this->b->s.x);
+                    
+                    vector2d pxa = (this->a->p * r) * r;
+                    vector2d pxb = (this->b->p * r) * r;
+                    
+                    this->a->p = this->a->p - pxa + pxb;
+                    this->b->p = this->b->p - pxb + pxa;
+                    
+                    break;
+                }
             }
         }
     }
     
     // Operators
     
-    void operator = (const collision & c)
+    void operator = (const event & c)
     {
         this->a = c.a;
         this->b = c.b;
@@ -312,29 +331,29 @@ struct collision
     }
 };
 
-ostream & operator << (ostream & out, collision c)
+ostream & operator << (ostream & out, event c)
 {
     out<<"{id = "<<c.id<<", type = ";
     
     switch(c.type)
     {
-        case collision::SEGMENT_A:
+        case event::SEGMENT_A:
             out<<"SEGMENT A";
             break;
-        case collision::SEGMENT_B:
+        case event::SEGMENT_B:
             out<<"SEGMENT B";
             break;
-        case collision::SEGMENT_MID:
+        case event::SEGMENT_MID:
             out<<"SEGMENT MID";
             break;
-        case collision::PARTICLE:
+        case event::PARTICLE:
             out<<"PARTICLE";
             break;
     }
     
     out<<": t = "<<c.t<<", a = "<<*(c.a);
 
-    if(c.type == collision::PARTICLE)
+    if(c.type == event::PARTICLE)
         out<<", b = "<<*(c.b);
     else
         out<<", s = "<<*(c.s);

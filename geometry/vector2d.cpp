@@ -78,6 +78,11 @@ struct vector2d
         return this->x * b.x + this->y * b.y;
     }
     
+    double operator ^ (vector2d b)
+    {
+        return this->x * b.y - this->y * b.x;
+    }
+    
     double operator ~ ()
     {
         return (*this) * (*this);

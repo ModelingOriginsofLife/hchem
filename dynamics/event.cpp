@@ -19,7 +19,7 @@ struct event
     double t;
     
     unsigned int id;
-    enum {PARTICLE, SEGMENT_A, SEGMENT_B, SEGMENT_MID, BOND_STRETCH} type;
+    enum {PARTICLE, SEGMENT_A, SEGMENT_B, SEGMENT_MID, BOND_STRETCH, PARTICLE_BOND} type;
     
     // Constructors
     
@@ -216,6 +216,10 @@ struct event
         this->id = id;
     }
     
+    event(particle & a, bond & n, double tmax, unsigned int id)
+    {
+    }
+    
     event(const event & c)
     {
         this->a = c.a;
@@ -245,11 +249,13 @@ struct event
                     
                     vector2d r = (this->a->s.x - this->b->s.x) / !(this->a->s.x - this->b->s.x);
 
-                    vector2d pxa = (this->a->p * r) * r;
-                    vector2d pxb = (this->b->p * r) * r;
+                    double pxa = (this->a->p * r);
+                    double pxb = (this->b->p * r);
                     
-                    this->a->p = this->a->p - pxa + pxb;
-                    this->b->p = this->b->p - pxb + pxa;
+                    double deltap = 2.0 * (pxa * this->b->m - pxb * this->a->m) / (this->a->m + this->b->m);
+                    
+                    this->a->p -= deltap * r;
+                    this->b->p += deltap * r;
                     
                     break;
                 }
@@ -298,11 +304,13 @@ struct event
                     
                     vector2d r = (this->a->s.x - this->b->s.x) / !(this->a->s.x - this->b->s.x);
                     
-                    vector2d pxa = (this->a->p * r) * r;
-                    vector2d pxb = (this->b->p * r) * r;
+                    double pxa = (this->a->p * r);
+                    double pxb = (this->b->p * r);
                     
-                    this->a->p = this->a->p - pxa + pxb;
-                    this->b->p = this->b->p - pxb + pxa;
+                    double deltap = 2.0 * (pxa * this->b->m - pxb * this->a->m) / (this->a->m + this->b->m);
+                    
+                    this->a->p -= deltap * r;
+                    this->b->p += deltap * r;
                     
                     break;
                 }

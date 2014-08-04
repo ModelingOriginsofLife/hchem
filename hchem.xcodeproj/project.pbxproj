@@ -26,7 +26,7 @@
 		F01486C719872A140078758E /* checklist.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = checklist.h; sourceTree = "<group>"; };
 		F01486C919872A2F0078758E /* checklist.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = checklist.cpp; sourceTree = "<group>"; };
 		F01486CA198798650078758E /* bond.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = bond.cpp; sourceTree = "<group>"; };
-		F01C1FAE198388B300557BFD /* hchem */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = hchem; sourceTree = BUILT_PRODUCTS_DIR; };
+		F01C1FAE198388B300557BFD /* hchem */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; name = hchem; path = "/Users/monti/Desktop/Progetti/Modeling Origins of Life/hchem/build/Debug/hchem"; sourceTree = "<absolute>"; };
 		F01C1FB01983960B00557BFD /* engine.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = engine.cpp; path = engine/engine.cpp; sourceTree = SOURCE_ROOT; };
 		F03458901981FBF90000024B /* event_heap.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = event_heap.cpp; sourceTree = "<group>"; };
 		F03458921981FBF90000024B /* event.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = event.cpp; sourceTree = "<group>"; };
@@ -46,6 +46,7 @@
 		F03458A21981FBF90000024B /* udp_socket.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = udp_socket.cpp; sourceTree = "<group>"; };
 		F03458A31981FBF90000024B /* udp_socket.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = udp_socket.h; sourceTree = "<group>"; };
 		F03458A51981FBF90000024B /* realtime_plot.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = realtime_plot.cpp; sourceTree = "<group>"; };
+		F04FB308198F4F1A00C94E7B /* equation.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = equation.cpp; path = math/equation.cpp; sourceTree = SOURCE_ROOT; };
 		F0C95CEB198CA8D900BFF70A /* zone.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = zone.cpp; path = engine/zone.cpp; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
@@ -73,7 +74,6 @@
 			isa = PBXGroup;
 			children = (
 				F03458851981FBD50000024B /* hchem */,
-				F01C1FAE198388B300557BFD /* hchem */,
 			);
 			sourceTree = "<group>";
 		};
@@ -83,6 +83,7 @@
 				F03458A41981FBF90000024B /* plot */,
 				F03458991981FBF90000024B /* network */,
 				F034588F1981FBF90000024B /* data */,
+				F04FB307198F4ED800C94E7B /* math */,
 				F03458941981FBF90000024B /* geometry */,
 				F03458911981FBF90000024B /* dynamics */,
 				F01C1FAF198395D300557BFD /* engine */,
@@ -146,6 +147,14 @@
 			path = plot;
 			sourceTree = SOURCE_ROOT;
 		};
+		F04FB307198F4ED800C94E7B /* math */ = {
+			isa = PBXGroup;
+			children = (
+				F04FB308198F4F1A00C94E7B /* equation.cpp */,
+			);
+			name = math;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -175,7 +184,7 @@
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = "Modeling Origins of Life";
 			};
-			buildConfigurationList = F034587E1981FBD50000024B /* Build configuration list for PBXProject "hchem" */;
+			buildConfigurationList = F034587E1981FBD50000024B /* Build configuration list for PBXProject "test" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -291,7 +300,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		F034587E1981FBD50000024B /* Build configuration list for PBXProject "hchem" */ = {
+		F034587E1981FBD50000024B /* Build configuration list for PBXProject "test" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F034588A1981FBD50000024B /* Debug */,

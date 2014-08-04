@@ -218,6 +218,28 @@ struct event
     
     event(particle & a, bond & n, double tmax, unsigned int id)
     {
+        vector2d nax = n.a->s.x - n.a->p / n.a->m * n.a->t;
+        vector2d nbx = n.b->s.x - n.b->p / n.b->m * n.b->t;
+        vector2d ax = a.s.x - a.p / a.m * a.t;
+        
+        vector2d b = nbx - nax;
+        vector2d v = (n.b->p / n.b->m) - (n.a->p / n.a->m);
+        
+        vector2d q = ax - nax;
+        vector2d w = (a.p / a.m) - (n.a->p / n.a->m);
+        
+        double alpha = v^w;
+        double beta = (q^v) + (w^b);
+        double gamma = q^b;
+        double delta = pow(a.s.r, 2) * ~b;
+        double epsilon = 2.0 * pow(a.s.r, 2) * (b * v);
+        double zeta = pow(a.s.r, 2) * ~v;
+        
+        double A = pow(alpha, 2);
+        double B = 2.0 * alpha * beta;
+        double C = pow(beta, 2) + 2.0 * alpha * gamma - zeta;
+        double D = 2.0 * beta * gamma - epsilon;
+        double E = pow(gamma, 2) - delta;
     }
     
     event(const event & c)

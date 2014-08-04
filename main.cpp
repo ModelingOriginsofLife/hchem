@@ -5,11 +5,15 @@
 #include <vector>
 #include <chrono>
 
-#include "engine/engine.cpp"
-#include "plot/realtime_plot.cpp"
-
 using namespace std;
+
+#include "math/equation.cpp"
+
+
 
 int main()
 {
+    equation e(4, -10, 35, -50, 24);
+    for(unsigned int i=0; i<e.length(); i++)
+        cout<<e[i]<<endl;
 }

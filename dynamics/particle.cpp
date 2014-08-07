@@ -6,15 +6,25 @@
 
 #include "../geometry/vector2d.cpp"
 #include "../geometry/sphere.cpp"
+#include "../chemistry/chemistry.cpp"
 
 using namespace std;
 
+struct bond;
+
 struct particle
 {
+    unsigned int id;
+    
     sphere s;
     double m;
     vector2d p;
     double t;
+    
+    vector <bond *> bonds;
+    vector <unsigned int> events;
+    
+    chemical_type ctype;
     
     // Constructors
     
@@ -40,6 +50,8 @@ struct particle
         this->m = p.m;
         this->p = p.p;
         this->t = p.t;
+
+        this->id = p.id;
     }
     
     // Operators
@@ -50,6 +62,8 @@ struct particle
         this->m = p.m;
         this->p = p.p;
         this->t = p.t;
+        
+        this->id = p.id;
     }
 };
 

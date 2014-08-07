@@ -10,7 +10,6 @@
 struct zone
 {
     vector <particle *> particles;
-    vector <bond *> bonds;
     vector <segment *> segments;
 };
 

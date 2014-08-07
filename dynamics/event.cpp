@@ -19,7 +19,7 @@ struct event
     double t;
     
     unsigned int id;
-    enum {PARTICLE, SEGMENT_A, SEGMENT_B, SEGMENT_MID, BOND_STRETCH, PARTICLE_BOND} type;
+    enum {PARTICLE, SEGMENT_A, SEGMENT_B, SEGMENT_MID, BOND_STRETCH} type;
     
     // Constructors
     
@@ -201,8 +201,8 @@ struct event
             this->t = -1;
             return;
         }
-        
-        this->t = (-B - sqrt(delta)) / (2.0 * A);
+
+        this->t = (2.0 * C) / (-B - sqrt(delta));
 
         if(this->t <= n.a->t || this->t <= n.b->t || this->t > tmax)
         {
@@ -216,37 +216,12 @@ struct event
         this->id = id;
     }
     
-    event(particle & a, bond & n, double tmax, unsigned int id)
-    {
-        vector2d nax = n.a->s.x - n.a->p / n.a->m * n.a->t;
-        vector2d nbx = n.b->s.x - n.b->p / n.b->m * n.b->t;
-        vector2d ax = a.s.x - a.p / a.m * a.t;
-        
-        vector2d b = nbx - nax;
-        vector2d v = (n.b->p / n.b->m) - (n.a->p / n.a->m);
-        
-        vector2d q = ax - nax;
-        vector2d w = (a.p / a.m) - (n.a->p / n.a->m);
-        
-        double alpha = v^w;
-        double beta = (q^v) + (w^b);
-        double gamma = q^b;
-        double delta = pow(a.s.r, 2) * ~b;
-        double epsilon = 2.0 * pow(a.s.r, 2) * (b * v);
-        double zeta = pow(a.s.r, 2) * ~v;
-        
-        double A = pow(alpha, 2);
-        double B = 2.0 * alpha * beta;
-        double C = pow(beta, 2) + 2.0 * alpha * gamma - zeta;
-        double D = 2.0 * beta * gamma - epsilon;
-        double E = pow(gamma, 2) - delta;
-    }
-    
     event(const event & c)
     {
         this->a = c.a;
         this->b = c.b;
         this->s = c.s;
+        this->n = c.n;
         
         this->t = c.t;
         this->id = c.id;
@@ -318,21 +293,21 @@ struct event
                     
                 case BOND_STRETCH:
                 {
-                    this->a->s.x += this->a->p / this->a->m * (this->t - this->a->t);
-                    this->a->t = this->t;
+                    this->n->a->s.x += this->n->a->p / this->n->a->m * (this->t - this->n->a->t);
+                    this->n->a->t = this->t;
                     
-                    this->b->s.x += this->b->p / this->b->m * (this->t - this->b->t);
-                    this->b->t = this->t;
+                    this->n->b->s.x += this->n->b->p / this->n->b->m * (this->t - this->n->b->t);
+                    this->n->b->t = this->t;
                     
-                    vector2d r = (this->a->s.x - this->b->s.x) / !(this->a->s.x - this->b->s.x);
+                    vector2d r = (this->n->a->s.x - this->n->b->s.x) / !(this->n->a->s.x - this->n->b->s.x);
                     
-                    double pxa = (this->a->p * r);
-                    double pxb = (this->b->p * r);
+                    double pxa = (this->n->a->p * r);
+                    double pxb = (this->n->b->p * r);
                     
-                    double deltap = 2.0 * (pxa * this->b->m - pxb * this->a->m) / (this->a->m + this->b->m);
+                    double deltap = 2.0 * (pxa * this->n->b->m - pxb * this->n->a->m) / (this->n->a->m + this->n->b->m);
                     
-                    this->a->p -= deltap * r;
-                    this->b->p += deltap * r;
+                    this->n->a->p -= deltap * r;
+                    this->n->b->p += deltap * r;
                     
                     break;
                 }
@@ -347,6 +322,7 @@ struct event
         this->a = c.a;
         this->b = c.b;
         this->s = c.s;
+        this->n = c.n;
         
         this->t = c.t;
         this->id = c.id;
@@ -368,25 +344,21 @@ ostream & operator << (ostream & out, event c)
     switch(c.type)
     {
         case event::SEGMENT_A:
-            out<<"SEGMENT A";
+            out<<"SEGMENT A: t = "<<c.t<<", a = "<<*(c.a)<<", s = "<<*(c.s);
             break;
         case event::SEGMENT_B:
-            out<<"SEGMENT B";
+            out<<"SEGMENT B: t = "<<c.t<<", a = "<<*(c.a)<<", s = "<<*(c.s);
             break;
         case event::SEGMENT_MID:
-            out<<"SEGMENT MID";
+            out<<"SEGMENT MID: t = "<<c.t<<", a = "<<*(c.a)<<", s = "<<*(c.s);
             break;
         case event::PARTICLE:
-            out<<"PARTICLE";
+            out<<"PARTICLE: t = "<<c.t<<", a = "<<*(c.a)<<", b = "<<*(c.b);
             break;
+        case event::BOND_STRETCH:
+            out<<"BOND STRETCH: t = "<<c.t<<", a = "<<*(c.n->a)<<", b = "<<*(c.n->b);
     }
     
-    out<<": t = "<<c.t<<", a = "<<*(c.a);
-
-    if(c.type == event::PARTICLE)
-        out<<", b = "<<*(c.b);
-    else
-        out<<", s = "<<*(c.s);
     out<<"}";
     
     return out;

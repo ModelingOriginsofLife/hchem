@@ -153,6 +153,38 @@ class realtime_plot
         this->spheres.clear();
         this->lines.clear();
     }
+    
+    void plot(engine & e)
+    {
+        unsigned char col[] = {255, 0, 0};
+        
+        for(unsigned int i=0; i<e.segments.size(); i++)
+            this->line(e.segments[i], col);
+
+        for(unsigned int i=0; i<e.particles.size(); i++)
+        {
+            this->sphere(e.particles[i].s, col, "A0");
+            for(unsigned int j=0; j<e.particles[i].bonds.size(); j++)
+            {
+                particle * p = (e.particles[i].bonds[j]->a == &(e.particles[i])) ? e.particles[i].bonds[j]->b : e.particles[i].bonds[j]->a;
+                if(p->id > e.particles[i].id)
+                {
+                    vector2d xa = e.particles[i].s.x;
+                    double ra = e.particles[i].s.r;
+                    
+                    vector2d xb = p->s.x;
+                    double rb = p->s.r;
+                    
+                    vector2d r = (xb - xa) / !(xb - xa);
+                    
+                    xa += r * ra;
+                    xb -= r * rb;
+                    
+                    this->line(segment(xa, xb), col);
+                }
+            }
+        }
+    }
 };
 
 #endif
